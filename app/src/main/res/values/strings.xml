@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">CalculateTime</string>
+    <string name="sum">+</string>
+    <string name="diff">-</string>
+    <string name="nothing">00h00m00s</string>
+    <string name="resultNull">Результат: 00h00m00s</string>
+</resources>
