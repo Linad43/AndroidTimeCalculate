@@ -90,18 +90,28 @@ class MainActivity : AppCompatActivity() {
 
     fun buttonSum(view: View) {
         timeResult.text = timeSum(time1.text.toString(), time2.text.toString())
+        changeColorAndToast()
         //time1.hint = "123 123"
         //timeResult.textColors = R.color.colorTextResult
         //timeResult.setTextColor(R.color.colorTextResult)
-        timeResult.setTextColor(ContextCompat.getColor(this, R.color.colorTextResult))
+        //timeResult.setTextColor(ContextCompat.getColor(this, R.color.colorTextResult))
         //timeResult.setTextColor(getResources().getColor(R.color.colorTextResult))
+
     }
 
     fun buttonDiff(view: View) {
         timeResult.text = timeDiff(time1.text.toString(), time2.text.toString())
-        timeResult.setTextColor(ContextCompat.getColor(this, R.color.colorTextResult))
+        changeColorAndToast()
+        //timeResult.setTextColor(ContextCompat.getColor(this, R.color.colorTextResult))
     }
-
+    private fun changeColorAndToast(){
+        timeResult.setTextColor(ContextCompat.getColor(this, R.color.colorTextResult))
+        val toast = Toast.makeText(
+            applicationContext,
+            "Результат ${timeResult.text}",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
     private fun timeSum(time1: String, time2: String) =
         secToText(textToSec(time1) + textToSec(time2))
 
