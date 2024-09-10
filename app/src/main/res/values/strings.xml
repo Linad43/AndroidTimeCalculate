@@ -1,7 +1,10 @@
 <resources>
-    <string name="app_name">CalculateTime</string>
+    <string name="app_name">Калькулятор времени</string>
     <string name="sum">+</string>
     <string name="diff">-</string>
     <string name="nothing">00h00m00s</string>
-    <string name="resultNull">Результат: 00h00m00s</string>
+    <string name="resultNull">Результат: 00h 00m 00s</string>
+    <string name="version">ver 0.9</string>
+    <string name="clear">Очистить</string>
+    <string name="exit">Выход</string>
 </resources>

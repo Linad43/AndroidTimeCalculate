@@ -1,26 +1,42 @@
 package linad.calculatetime
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import android.widget.Toolbar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.text.set
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import kotlin.math.abs
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var time1:EditText
-    private lateinit var time2:EditText
-    private lateinit var buttonSum:Button
-    private lateinit var buttonDiff:Button
-    private lateinit var timeResult:TextView
+    private lateinit var toolbar: androidx.appcompat.widget.Toolbar
+    private lateinit var time1: EditText
+    private lateinit var time2: EditText
+    private lateinit var buttonSum: Button
+    private lateinit var buttonDiff: Button
+    private lateinit var timeResult: TextView
 
+    @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        //setContentView(R.layout.activity_main)
         setContentView(R.layout.activity_main)
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -33,17 +49,65 @@ class MainActivity : AppCompatActivity() {
         buttonDiff = findViewById(R.id.buttonDiff)
         timeResult = findViewById(R.id.textResult)
 
-        buttonSum(buttonSum)
-        buttonDiff(buttonDiff)
+        //buttonSum.setBackgroundColor(ContextCompat.getColor(this, R.color.colorBtn))
+
+        /*buttonSum(buttonSum)
+        buttonDiff(buttonDiff)*/
     }
-    fun buttonSum(view: View){
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.clearMenuMain -> {
+                time1.text.clear()
+                time2.text.clear()
+                timeResult.setText(R.string.resultNull)
+                timeResult.setTextColor(ContextCompat.getColor(this, R.color.black))
+                //timeResult.setTextColor(getResources().getColor(R.color.black))
+                //timeResult.text = "Результат: 00h00m00s"
+                val toast = Toast.makeText(
+                    applicationContext,
+                    "Произведена очистка",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+            R.id.exitMenuMain -> {
+                val toast = Toast.makeText(
+                    applicationContext,
+                    "Программа завершена",
+                    Toast.LENGTH_LONG
+                ).show()
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    fun buttonSum(view: View) {
         timeResult.text = timeSum(time1.text.toString(), time2.text.toString())
+        //time1.hint = "123 123"
+        //timeResult.textColors = R.color.colorTextResult
+        //timeResult.setTextColor(R.color.colorTextResult)
+        timeResult.setTextColor(ContextCompat.getColor(this, R.color.colorTextResult))
+        //timeResult.setTextColor(getResources().getColor(R.color.colorTextResult))
     }
-    fun buttonDiff(view: View){
+
+    fun buttonDiff(view: View) {
         timeResult.text = timeDiff(time1.text.toString(), time2.text.toString())
+        timeResult.setTextColor(ContextCompat.getColor(this, R.color.colorTextResult))
     }
-    private fun timeSum(time1: String, time2: String) = secToText(textToSec(time1) + textToSec(time2))
-    private fun timeDiff(time1: String, time2: String) = secToText(textToSec(time1) - textToSec(time2))
+
+    private fun timeSum(time1: String, time2: String) =
+        secToText(textToSec(time1) + textToSec(time2))
+
+    private fun timeDiff(time1: String, time2: String) =
+        secToText(textToSec(time1) - textToSec(time2))
+
     private fun textToSec(text: String): Int {
         val num = mutableMapOf(
             "h" to 0,
@@ -71,13 +135,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun secToText(sec: Int): String {
-        var buf = sec
+        val flag = if (sec < 0) " -" else ""
+        var buf = abs(sec)
         val hour = buf / (60 * 60)
         buf -= (hour * 60 * 60)
         val minute = buf / 60
         buf -= (minute * 60)
         val second = buf
-        return "Результат: ${hour}h ${minute}m ${second}s"
+        return "Результат:$flag ${hour}h ${minute}m ${second}s"
     }
 
     private fun checkToInt(letter: Char): Boolean {
